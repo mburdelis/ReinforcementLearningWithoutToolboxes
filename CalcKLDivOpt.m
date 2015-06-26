@@ -1,10 +1,10 @@
-function KLDivOpt = CalcKLDivOpt(OptU, P, CurState, NStatePairs)
+function [KLDivOpt] = CalcKLDivOpt(NStates, P, OptU)
     
-    KLDivOpt = 0;
-    
-    for IndexPosFutState=1:NStatePairs
-        if P(CurState, IndexPosFutState)  ~= 0
-            KLDivOpt = KLDivOpt + OptU(CurState, IndexPosFutState)*log(OptU(CurState, IndexPosFutState)/P(CurState, IndexPosFutState));
-        end    
-    end
+    KLDivOpt = nansum(OptU.*log(OptU./P));
+%     KLDivOpt = 0;
+%     for IndexPosFutState=1:NStates
+%         if P(IndexPosFutState)  ~= 0
+%             KLDivOpt = KLDivOpt + OptU(IndexPosFutState)*log(OptU(IndexPosFutState)/P(IndexPosFutState));
+%         end    
+%     end
 end

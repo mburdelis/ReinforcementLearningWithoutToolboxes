@@ -40,7 +40,7 @@ if GoalStateIsObs == 0
     if options.StateType == 2
 		[OptU] = CalculateOptimalU_StPosPair(States, NStates, options.input.AuxObstacles, options.input.SizeAuxObstacles, z_opt, q, P);
 	else
-        [OptU] = CalculateOptimalU_PosIsSt(States, NStates, options.input.AuxObstacles, z_opt, q, P);
+        [OptU] = CalculateOptimalU_PosIsSt(States, NStates, options.input.AuxObstacles, options.input.SizeAuxObstacles, z_opt, q, P);
     end
     
     disp('Finding the maximum transition probability for each state');
@@ -57,7 +57,8 @@ if GoalStateIsObs == 0
     if options.StateType == 2
         [MapMatrix, TotalCost] = GenTrajGraph(GridSize, NStatePairs, q, P, GoalState, MaxOptUs, options, States, OptU, 1);
     else
-        [MapMatrix, TotalCost] = GenTrajGraph_PosIsSt(States, NStates, options.input.GridSize, options.input.GoalState, options.input.AuxObstacles, options.input.SizeAuxObstacles, q, P, MaxOptUs, OptU, 1);
+        [MapMatrix, TotalCost] = GenTrajGraph_PosIsSt(States, NStates, options.input.GridSize, options.input.GoalState, q, P, GoalState, MaxOptUs, OptU, 1);
+                                                     (States, NStates, GridSize, GoalPos, ObstacleIndexes, NumObstacles, q, P, MaxOptUs, OptU, IniPosition)
     end
     
 else % if GoalStateIsObs == 0

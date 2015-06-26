@@ -1,5 +1,8 @@
-options.input.GridSize = 10;
-options.input.GoalState = options.input.GridSize^2;   %   Initializing the Goal State
+% options.input.GridSize = 10;
+options.input.GridSize = 15;    % Todorov's map
+% options.input.GoalState = options.input.GridSize^2;   %   Initializing the Goal State
+options.input.GoalState = 115;  %   Initializing the Goal State
+                                % Todorov's map
                     
 options.StateType = 1;	%	2: state pairs (for inertia and collisions)
 		%	any other value: 1 position = 1 state
@@ -171,7 +174,8 @@ options.val.MinPolThreshold = 1e-10;    %   Threshold to be considered for the
                                     %   the equation of the greedy policy
                                 
 %   Related to obstacles:
-options.input.AuxObstacles = [3, 13, 23, 33, 38, 43, 48, 53, 58, 63, 68, 78, 88, 98];    %   auxiliary variable with the locations of the obstacles
+% options.input.AuxObstacles = [3, 13, 23, 33, 38, 43, 48, 53, 58, 63, 68, 78, 88, 98];    %   auxiliary variable with the locations of the obstacles
+options.input.AuxObstacles = [38, 42, 53, 57, 68, 72, 79, 80, 81, 82, 83, 87, 94, 102, 109, 117, 124, 132, 139, 143, 144, 145, 146, 147, 154, 158, 169, 173, 184, 188]; % Todorov's map
 [L, options.input.SizeAuxObstacles] = size(options.input.AuxObstacles);
 options.input.Obstacles = zeros(1, (options.input.GridSize^2));  %   Location of obstacles (walls)
 for i=1:options.input.SizeAuxObstacles

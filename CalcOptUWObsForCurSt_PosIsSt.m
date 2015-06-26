@@ -1,4 +1,4 @@
-function OptUForCurSt = CalcOptUWObsForCurSt_PosIsSt(CurSt, States, NStates, IndexCurSt, ObstacleIndexes, NumObstacles, z_opt, StateCostCurSt, PCurSt)
+function OptUForCurSt = CalcOptUWObsForCurSt_PosIsSt(CurSt, States, NStates, IndexCurSt, ObstacleIndexes, z_opt, StateCostCurSt, PCurSt)
 %CalcOptUWObsForCurSt_PosIsSt Calculates optimal u (1 state = 1 position
 %implementation)
 %   The implementation was separated into different functions to avoid
