@@ -1,8 +1,7 @@
-function adjacent=CheckAdj(CodCurState, CodPropState, GridSize)
+function adjacent=CheckAdj_LinCColC(LinCur, ColCur, CodPropState, GridSize)
    
     % get the indexes of the line and the column of the grid world,
-    % for the given coded current and proposed states
-    [LinCur, ColCur] = GetLinCol(CodCurState, GridSize);
+    % for the given coded proposed state
     [LinProp, ColProp] = GetLinCol(CodPropState, GridSize);
     
     % check if the absolute value of the difference is bigger than one

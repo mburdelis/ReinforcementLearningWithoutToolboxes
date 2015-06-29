@@ -60,6 +60,14 @@ if GoalStateIsObs == 0
         [MapMatrix, TotalCost] = GenTrajGraph_PosIsSt(States, NStates, options.input.GridSize, options.input.GoalState, options.input.AuxObstacles, options.input.SizeAuxObstacles, q, P, MaxOptUs, OptU, 1);
     end
     
+    %   Initializing the estimated passive dynamics matrix
+    disp('Initializing the estimated passive dynamics and calculating the number of adjacent states per state');
+    if options.StateType == 2
+        [EstimatedPassive, NAdjPerState] = GenEstimPas(States, NStatePairs, GridSize, GoalState, StateType, options);
+    else
+        [EstimatedPassive, NAdjPerState] = GenEstimPas_PosIsSt(NStates, options.input.GridSize, options.input.GoalState, options.input.AuxObstacles, options.EstimPasType);
+    end
+    
 else % if GoalStateIsObs == 0
     disp('Error: goal state is located in an "obstacle-position": aborting execution');
 end % if GoalStateIsObs == 0
