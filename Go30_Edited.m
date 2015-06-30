@@ -90,7 +90,7 @@ else % if options.StateType == 2
     
     %   Initializing the estimated q vector
     disp('Initializing the estimated q');
-    [Estimated_q, options.NumEqsNadjMult, options.NumEqsNadjSum] = GenEstimQ_PosIsSt(NStates, options.input.GoalState, options.UseTotalCosts, options.GoalStateCost, options.OtherStatesCost, options.NumEqsNadjMult, options.NumEqsNadjSum);
+    [Estimated_q, options.NumEqsNadjMult, options.NumEqsNadjSum] = GenEstimQ_PosIsSt(NStates, options.input.GoalState, options.UseTotalCosts, options.input.GoalStateCost, options.input.OtherStatesCost, options.NumEqsNadjMult, options.NumEqsNadjSum);
     
     disp('Running the algorithm');
     [ErrorsPd, LastErrorsPd, ErrorsQ, LastErrorsQ, v, Z, results, LogActions, ErrorZ, ErrorV, ErrorZSumAbs, ErrorZSumSqr, ErrorVSumAbs, ErrorVSumSqr, InitialStates, NumEqsPerState, EstimatedPassive, ErrorPdSumAbs, ErrorQSumAbs, ErrorPdCountLog, ErrorQCountLog, IndexesPdLog, IndexesQLog, ErrorsPdLog, ErrorsQLog]=ZlearningGWNonStop_PosIsSt(M,T,options,States,NStatePairs,GoalState,GridSize,prev_or_next,z_opt,v_opt, EstimatedPassive, NAdjPerState, Estimated_q);
