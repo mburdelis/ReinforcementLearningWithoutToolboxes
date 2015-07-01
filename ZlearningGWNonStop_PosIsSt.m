@@ -1,4 +1,4 @@
-function [ErrorsPd, LastErrorsPd, ErrorsQ, LastErrorsQ, v, Z, results, LogActions, ErrorZ, ErrorV, ErrorZSumAbs, ErrorZSumSqr, ErrorVSumAbs, ErrorVSumSqr, InitialStates, NumEqsPerState, EstimatedPassive, ErrorPdSumAbs, ErrorQSumAbs, ErrorPdCountLog, ErrorQCountLog, IndexesPdLog, IndexesQLog, ErrorsPdLog, ErrorsQLog]=ZlearningGWNonStop_PosIsSt(M,T,options,States,NStates,GoalState,GridSize,prev_or_next,future_cost,z_opt,v_opt, EstimatedPassive, NAdjPerState, Estimated_q)
+function [ErrorsPd, LastErrorsPd, ErrorsQ, LastErrorsQ, v, Z, results, LogActions, ErrorZ, ErrorV, ErrorZSumAbs, ErrorZSumSqr, ErrorVSumAbs, ErrorVSumSqr, InitialStates, NumEqsPerState, EstimatedPassive, ErrorPdSumAbs, ErrorQSumAbs, ErrorPdCountLog, ErrorQCountLog, IndexesPdLog, IndexesQLog, ErrorsPdLog, ErrorsQLog]=ZlearningGWNonStop_PosIsSt(M,T,options,States,NStates,GoalState,GridSize,prev_or_next,future_cost,z_opt,v_opt, EstimatedPassive, NAdjPerState, Estimated_q, CorrectPassive, Correct_q, OnesObstacles, OnesNonObstacles)
 
     %%%%%%%%%%%%%%
     % alterar %
@@ -27,20 +27,28 @@ function [ErrorsPd, LastErrorsPd, ErrorsQ, LastErrorsQ, v, Z, results, LogAction
     ErrorsQLog = zeros(NStates, 20);
   
     ErrorsLogCounter = zeros(NStates, 1);
+
+    % Simply checking the sum of absolute differences between the current
+    % estimated values and the real values (obtained when the problem was
+    % solved analytically in closed form)
+    CurrentErrorsPd = UpdateErrorsPd_PosIsSt(EstimatedPassive, CorrectPassive);
+    CurrentErrorsQ = UpdateErrorsQ_PosIsSt(Estimated_q, Correct_q);
+    
+    %%%%%%%%%%%%%%%%%%%%%%%
+    % IMPORTANT: both Correct_q and Estimated_q have non-zero values for
+    % obdtacle states/positions. Shouldn't it be zero?? Same thing for "v"
+    %%%%%%%%%%%%%%%%%%%%%%%
+    
+    ErrorsPdLog(:, 1) = CurrentErrorsPd(:, 1);
+    ErrorsQLog(:, 1) = CurrentErrorsQ(:, 1);
   
-  CurrentErrorsPd = UpdateErrorsPd(States, NStates, GoalState, NAdjPerState, EstimatedPassive, GridSize, CurrentErrorsPd, options);
-  CurrentErrorsQ = UpdateErrorsQ(States, NStates, GoalState, NAdjPerState, Estimated_q, CurrentErrorsQ, options);
-  
-  ErrorsPdLog(:, 1) = CurrentErrorsPd(:, 1);
-  ErrorsQLog(:, 1) = CurrentErrorsQ(:, 1);
-  
-  % Initializing the 3 dimensional vector which will have the equations,
-  % and the vector "NumEqsPerState" with the number of already obtained
-  % equations per state
-  NumEqsPerState = zeros(NStates, 1);
-  Equations = zeros((9*options.NumEqsNadjMult)+options.NumEqsNadjSum, 10, NStates);
-  % We are already receiving the number of adjacent states per state as a
-  % parameter, in the variable NAdjPerState
+    % Initializing the 3 dimensional vector which will have the equations,
+    % and the vector "NumEqsPerState" with the number of already obtained
+    % equations per state
+    NumEqsPerState = zeros(NStates, 1);
+    Equations = zeros((9*options.NumEqsNadjMult)+options.NumEqsNadjSum, 10, NStates);
+    % We are already receiving the number of adjacent states per state as a
+    % parameter, in the variable NAdjPerState
   
   
   Z=exp(-v);

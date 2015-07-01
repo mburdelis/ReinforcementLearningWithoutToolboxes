@@ -29,13 +29,13 @@ if options.StateType == 2
     SolveClosedForm_StatePairs;
     
     disp('Calculating the optimal state transition distributions u');
-    [OptU] = CalculateOptimalU_StPosPair(States, NStates, options.input.AuxObstacles, options.input.SizeAuxObstacles, z_opt, q, P);
+    [OptU] = CalculateOptimalU_StPosPair(States, NStates, options.input.AuxObstacles, options.input.SizeAuxObstacles, z_opt, q, Passive);
     
     disp('Finding the maximum transition probability for each state');
     MaxOptUs = FindMaxProbFromOptU(States, OptU);
     
     disp('Generating the trajectories');
-    [MapMatrix, TotalCost] = GenTrajGraph(GridSize, NStatePairs, q, P, GoalState, MaxOptUs, options, States, OptU, 1);
+    [MapMatrix, TotalCost] = GenTrajGraph(GridSize, NStatePairs, q, Passive, GoalState, MaxOptUs, options, States, OptU, 1);
     
     %   Initializing the estimated passive dynamics matrix
     disp('Initializing the estimated passive dynamics and calculating the number of adjacent states per state');
@@ -63,10 +63,10 @@ else % if options.StateType == 2
     %	Now solving the problem analytically
 	disp('Solving analytically');
     % SolveClosedForm_PosIsSt;
-    [P, q, z_opt, v_opt, Matrix, Matrix_z_opt] = SolveClosedForm_PosIsSt(States, NStates, options.input.GridSize, options.input.GoalState, options.input.AuxObstacles, options.input.GoalStatePosPairIndex, options.input.OtherStatesCost, options.input.GoalStateCost);
+    [Passive, q, z_opt, v_opt, Matrix, Matrix_z_opt] = SolveClosedForm_PosIsSt(States, NStates, options.input.GridSize, options.input.GoalState, options.input.AuxObstacles, options.input.GoalStatePosPairIndex, options.input.OtherStatesCost, options.input.GoalStateCost);
     
     disp('Calculating the optimal state transition distributions u');
-    [OptU] = CalculateOptimalU_PosIsSt(States, NStates, options.input.AuxObstacles, z_opt, q, P);
+    [OptU] = CalculateOptimalU_PosIsSt(States, NStates, options.input.AuxObstacles, z_opt, q, Passive);
     
     disp('Finding the maximum transition probability for each state');
     % For MaxOptUs, the first column will be the maximum probability u, the
@@ -75,7 +75,7 @@ else % if options.StateType == 2
     MaxOptUs = FindMaxProbFromOptU_PosIsSt(OptU);
     
     disp('Generating the trajectories');
-    [MapMatrix, TotalCost] = GenTrajGraph_PosIsSt(States, NStates, options.input.GridSize, options.input.GoalState, options.input.AuxObstacles, options.input.SizeAuxObstacles, q, P, MaxOptUs, OptU, 1);
+    [MapMatrix, TotalCost] = GenTrajGraph_PosIsSt(States, NStates, options.input.GridSize, options.input.GoalState, options.input.AuxObstacles, options.input.SizeAuxObstacles, q, Passive, MaxOptUs, OptU, 1);
     
     %   Initializing the estimated passive dynamics matrix
     disp('Initializing the estimated passive dynamics and calculating the number of adjacent states per state');
@@ -86,14 +86,14 @@ else % if options.StateType == 2
     NumObtEq = -(NAdjPerState < 0);
     
     disp('Separating which indexes correspond to good states, and which ones do not');
-    [GoodIndexes, BadIndexes] = SeparateIndexes_PosIsSt(States, options.input.AuxObstacles);
+    [GoodIndexes, BadIndexes, OnesObstacles, OnesNonObstacles] = SeparateIndexes_PosIsSt(States, options.input.AuxObstacles);
     
     %   Initializing the estimated q vector
     disp('Initializing the estimated q');
     [Estimated_q, options.NumEqsNadjMult, options.NumEqsNadjSum] = GenEstimQ_PosIsSt(NStates, options.input.GoalState, options.UseTotalCosts, options.input.GoalStateCost, options.input.OtherStatesCost, options.NumEqsNadjMult, options.NumEqsNadjSum);
     
     disp('Running the algorithm');
-    [ErrorsPd, LastErrorsPd, ErrorsQ, LastErrorsQ, v, Z, results, LogActions, ErrorZ, ErrorV, ErrorZSumAbs, ErrorZSumSqr, ErrorVSumAbs, ErrorVSumSqr, InitialStates, NumEqsPerState, EstimatedPassive, ErrorPdSumAbs, ErrorQSumAbs, ErrorPdCountLog, ErrorQCountLog, IndexesPdLog, IndexesQLog, ErrorsPdLog, ErrorsQLog]=ZlearningGWNonStop_PosIsSt(M,T,options,States,NStatePairs,GoalState,GridSize,prev_or_next,z_opt,v_opt, EstimatedPassive, NAdjPerState, Estimated_q);
+    [ErrorsPd, LastErrorsPd, ErrorsQ, LastErrorsQ, v, Z, results, LogActions, ErrorZ, ErrorV, ErrorZSumAbs, ErrorZSumSqr, ErrorVSumAbs, ErrorVSumSqr, InitialStates, NumEqsPerState, EstimatedPassive, ErrorPdSumAbs, ErrorQSumAbs, ErrorPdCountLog, ErrorQCountLog, IndexesPdLog, IndexesQLog, ErrorsPdLog, ErrorsQLog]=ZlearningGWNonStop_PosIsSt(M,T,options,States,NStatePairs,GoalState,GridSize,prev_or_next,z_opt,v_opt, EstimatedPassive, NAdjPerState, Estimated_q, Passive, q, OnesObstacles, OnesNonObstacles);
 end % if options.StateType == 2
 
     CheckResults;
