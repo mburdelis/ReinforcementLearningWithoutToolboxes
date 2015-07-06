@@ -1,8 +1,8 @@
 function [ErrorsPd, LastErrorsPd, ErrorsQ, LastErrorsQ, v, Z, results, LogActions, ErrorZ, ErrorV, ErrorZSumAbs, ErrorZSumSqr, ErrorVSumAbs, ErrorVSumSqr, InitialStates, NumEqsPerState, EstimatedPassive, ErrorPdSumAbs, ErrorQSumAbs, ErrorPdCountLog, ErrorQCountLog, IndexesPdLog, IndexesQLog, ErrorsPdLog, ErrorsQLog]=ZlearningGWNonStop_PosIsSt(options,States,NStates,GoalState,GridSize,prev_or_next,future_cost,z_opt,v_opt, EstimatedPassive, NAdjPerState, Estimated_q, CorrectPassive, Correct_q, OnesObstacles, OnesNonObstacles)
 
+
     nstates = GridSize^2;		  % apenas 9 estados possiveis (posicoes do "ponto" no "grid world")
     nactions = GridSize^2;	  % number of total possible actions per state
-    
     %   results:
     %   the first index is the episode, the second is "fin", the third is
     %   "t_abs" and the fourth is the accumulated cost
